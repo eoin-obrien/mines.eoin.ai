@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    /* Root-level tooling config (vitest) legitimately reads env vars. The
+       packages themselves keep `types: []` — the core must stay platform-free. */
+    "types": ["node"]
+  },
+  "include": ["*.ts", "*.mts"]
+}

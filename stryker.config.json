@@ -1,0 +1,16 @@
+{
+  "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
+  "_comment": "Mutation score is the real signal; line coverage is only a floor. Runs nightly and on release, never on every push — see .github/workflows/nightly.yml. Two TypeScript-7 accommodations: tsconfig files are kept out of the sandbox, and the `typescript` checker is off, because Stryker 9.6 reaches for TS's legacy JS API (ts.parseConfigFileTextToJson) which TS 7 removed. Re-enable `checkers: [\"typescript\"]` + `tsconfigFile` once Stryker supports the TS7 API; the cost meanwhile is only that non-compiling mutants get run instead of pruned.",
+  "packageManager": "pnpm",
+  "testRunner": "vitest",
+  "plugins": ["@stryker-mutator/vitest-runner"],
+  "mutate": ["packages/*/src/**/*.ts", "!packages/*/src/**/*.test.ts", "!packages/*/src/index.ts"],
+  "coverageAnalysis": "perTest",
+  "incremental": true,
+  "incrementalFile": "reports/stryker-incremental.json",
+  "reporters": ["html", "clear-text", "progress"],
+  "htmlReporter": { "fileName": "reports/mutation/index.html" },
+  "thresholds": { "high": 90, "low": 80, "break": 80 },
+  "timeoutMS": 15000,
+  "ignorePatterns": ["dist", "coverage", "reports", ".stryker-tmp", "**/tsconfig*.json"]
+}

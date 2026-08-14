@@ -1,0 +1,38 @@
+{
+  "name": "mines-eoin-ai",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Minesweeper at minesweeper.eoin.ai — pure TypeScript engine, no-guess generation, property-tested.",
+  "license": "MIT",
+  "author": "Eoin O'Brien",
+  "packageManager": "pnpm@11.15.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "pnpm -r build",
+    "dev": "pnpm --filter @eoin/minesweeper-site dev",
+    "typecheck": "tsc --noEmit -p tsconfig.json && pnpm -r typecheck",
+    "lint": "biome check .",
+    "format": "biome check --write .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:heavy": "MINES_PROP_RUNS=1000 vitest run",
+    "mutate": "stryker run",
+    "size": "pnpm -r --if-present size",
+    "verify": "pnpm lint && pnpm typecheck && pnpm test && pnpm build"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.8",
+    "@stryker-mutator/core": "^9.6.1",
+    "@stryker-mutator/vitest-runner": "^9.6.1",
+    "@types/node": "^26.2.0",
+    "@vitest/coverage-v8": "^4.1.10",
+    "fast-check": "^4.9.0",
+    "tsdown": "^0.22.14",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10"
+  }
+}

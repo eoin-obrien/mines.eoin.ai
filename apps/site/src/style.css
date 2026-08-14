@@ -1,0 +1,80 @@
+/*
+ * Placeholder styling only. The real theme system (semantic tokens per SPEC.md:
+ * --cell-hidden, --cell-revealed, --n1..--n8, --mine, --flag) arrives with the
+ * DOM renderer in M4; what is established here is the shape — every colour is a
+ * custom property on :root, so a palette is one data object.
+ */
+:root {
+  --bg: #14182b;
+  --fg: #e4e7f5;
+  --dim: #8b90ad;
+  --cell-hidden: #2a3050;
+  --cell-revealed: #1b2039;
+  --accent: #f2b134;
+  --cell-size: 24px;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #eceef7;
+    --fg: #1b2039;
+    --dim: #5c6180;
+    --cell-hidden: #c8cce0;
+    --cell-revealed: #dde0ee;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  text-rendering: optimizeLegibility;
+}
+
+.shell {
+  display: grid;
+  gap: 1.25rem;
+  justify-items: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(2.5rem, 12vw, 4rem);
+  letter-spacing: 0.35em;
+  text-indent: 0.35em;
+  color: var(--accent);
+}
+
+.tagline,
+.meta {
+  margin: 0;
+  color: var(--dim);
+  font-size: 0.8125rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 9), var(--cell-size));
+  gap: 2px;
+}
+
+.cell {
+  width: var(--cell-size);
+  height: var(--cell-size);
+  background: var(--cell-hidden);
+  border-radius: 2px;
+}
+
+.cell[data-revealed] {
+  background: var(--cell-revealed);
+}

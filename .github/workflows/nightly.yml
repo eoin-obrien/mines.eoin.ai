@@ -1,0 +1,50 @@
+name: Nightly
+
+# The slow, honest gates. Mutation testing and high-run property testing are too
+# slow for every push but are what actually prove the suite has teeth, so they
+# run once a night and on demand.
+on:
+  schedule:
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+
+jobs:
+  mutation:
+    runs-on: ${{ vars.RUNNER_LABEL || 'ubuntu-latest' }}
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      - name: Stryker mutation testing
+        run: pnpm mutate
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mutation-report
+          path: reports/mutation
+          if-no-files-found: ignore
+          retention-days: 30
+
+  heavy-properties:
+    runs-on: ${{ vars.RUNNER_LABEL || 'ubuntu-latest' }}
+    timeout-minutes: 60
+    env:
+      # 1000+ runs per property. fast-check prints the failing seed; reproduce
+      # locally with MINES_PROP_SEED=<seed> pnpm test.
+      MINES_PROP_RUNS: '1000'
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
