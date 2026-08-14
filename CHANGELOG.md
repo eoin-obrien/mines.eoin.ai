@@ -16,8 +16,9 @@ defined in `SPEC.md`.
 - `src/coord`: branded `CellIndex`/`Coord`, index↔coord conversion, neighbour
   math and precomputed neighbour tables, with property tests including
   neighbour symmetry (catalogue #15) against a naive oracle.
-- CI workflow (lint, typecheck, test, build, size on Node 20/22/24) and a
-  nightly workflow (Stryker + 1000-run property tests).
+- CI workflow (lint, typecheck, test, build, size on Node 22/24, plus a Node 20
+  import smoke test against the built artifact) and a nightly workflow
+  (Stryker + 1000-run property tests).
 - `SPEC.md` (design reference, split out of `CLAUDE.md`), rewritten `CLAUDE.md`
   working rules, `AGENTS.md` mirror, README, placeholder site for Cloudflare
   Pages.

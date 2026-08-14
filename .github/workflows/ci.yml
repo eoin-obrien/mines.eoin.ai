@@ -22,7 +22,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: ['20', '22', '24']
+        # Node 20 is missing `node:sqlite`, which pnpm 11 requires, so the
+        # toolchain itself cannot run there. The library's own Node 20 support is
+        # checked against the built artifact in `engine-compat` below.
+        node: ['22', '24']
     steps:
       - uses: actions/checkout@v5
 
@@ -60,3 +63,25 @@ jobs:
             reports/
           if-no-files-found: ignore
           retention-days: 14
+
+  engine-compat:
+    # `@eoin/minesweeper-core` declares `engines: node >= 20`. The dev toolchain
+    # cannot run on Node 20, so the claim is checked the way a consumer would:
+    # build on current Node, then import the published ESM entry on the oldest
+    # supported runtime.
+    runs-on: ${{ vars.RUNNER_LABEL || 'ubuntu-latest' }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @eoin/minesweeper-core build
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '20'
+      - name: Import the built entry on Node 20
+        run: node .github/scripts/smoke-core.mjs
