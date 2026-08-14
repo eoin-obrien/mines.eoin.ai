@@ -83,5 +83,8 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: '20'
+          # setup-node probes the detected package manager for its cache path;
+          # pnpm 11 cannot start on Node 20, so that probe must be off here.
+          package-manager-cache: false
       - name: Import the built entry on Node 20
         run: node .github/scripts/smoke-core.mjs
